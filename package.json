@@ -1,0 +1,29 @@
+{
+  "name": "mern1",
+  "version": "1.0.0",
+  "description": "monorepo mern stack application",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently -n API,WEB -c cyan,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "dev:api": "npm run dev -w backend",
+    "dev:web": "npm run dev -w frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firass99/doctor-appointment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/firass99/doctor-appointment/issues"
+  },
+  "homepage": "https://github.com/firass99/doctor-appointment#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
