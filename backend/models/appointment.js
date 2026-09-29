@@ -50,7 +50,9 @@ const appointmentSchema = new mongoose.Schema(
 );
 
 // Prevent double booking: same doctor, same day, same start time
-appointmentSchema.index({ doctor: 1, date: 1, startTime: 1 }, { unique: true });
-
+appointmentSchema.index(
+  { doctor: 1, date: 1, startTime: 1 },
+  { unique: true, partialFilterExpression: { status: { $ne: "CANCELLED" } } },
+);
 const Appointment = mongoose.model("Appointment", appointmentSchema);
 export default Appointment;

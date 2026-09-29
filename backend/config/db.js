@@ -12,7 +12,7 @@ const connectDB = async () => {
       console.log(chalk.green.bold("✔ MongoDB connected"));
       app.listen(PORT, () => {
         console.log(
-          chalk.bgMagentaBright.black.bold(" SERVER ") +
+          chalk.bgGreenBright.black.bold(" SERVER ") +
             chalk.cyan(` Running on http://localhost:${PORT}`),
         );
       });

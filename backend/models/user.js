@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const ROLES = ["ADMIN", "DOCTOR", "USER"];
+export const ROLES = ["ADMIN", "DOCTOR", "USER"];
 
 const userSchema = new mongoose.Schema(
   {
@@ -30,10 +30,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ROLES,
       default: "USER",
-    },
-    speciality: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Speciality",
     },
   },
   { timestamps: true }, // adds createdAt & updatedAt
