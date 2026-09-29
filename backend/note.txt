@@ -1,0 +1,17 @@
+MERN STACK : 
+
+##### BackEnd #### 
+
+npm init -y 
+npm i express mongoose bcryptjs jsonwebtoken dotenv cors nodemon
+nodemon server.js
+-------
+const app = express();
+app.use(express.json());
+
+
+  "type": "module",
+
+
+
+
