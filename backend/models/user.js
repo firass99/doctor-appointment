@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema(
       enum: ROLES,
       default: "USER",
     },
+    speciality: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Speciality",
+    },
   },
   { timestamps: true }, // adds createdAt & updatedAt
 );
