@@ -8,23 +8,31 @@ import LoginPage from "./components/pages/(guest)/LoginPage";
 import RegisterPage from "./components/pages/(guest)/RegisterPage";
 import TestPage from "./components/pages/(guest)/TestPage";
 import AdminDashboard from "./components/pages/(admin)/AdminDashboard";
+import DoctorById from "./components/pages/(guest)/DoctorById";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/">
+          <Route path="">
+            {"HOME PAGES"}
             <Route index element={<HomePage />} />
-
             <Route path="about" element={<AboutPage />} />
-            <Route path="doctors" element={<DoctorsPage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="registre" element={<RegisterPage />} />
             <Route path="test" element={<TestPage />} />
+
+            {"DOCTORS PAGES"}
+            <Route path="doctors">
+              <Route index element={<DoctorsPage />} />
+              <Route path=":id" element={<DoctorById />} />
+              <Route />
+            </Route>
           </Route>
 
-          <Route path="/admin">
+          {"ADMIN PAGES"}
+          <Route path="admin">
             <Route index element={<AdminDashboard />} />
           </Route>
           {""}
