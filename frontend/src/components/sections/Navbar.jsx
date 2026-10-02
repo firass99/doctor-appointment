@@ -1,86 +1,120 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, Stethoscope, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { label: "Home", href: "#home" },
-  { label: "Appointments", href: "#appointments" },
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Tips", href: "#tips" },
+  { name: "About", url: "/about" },
+  { name: "Departments", url: "/departments" },
+  { name: "Doctors", url: "/doctors" },
+  { name: "Contact", url: "/contact" },
 ];
 
-const outline = cn(
-  buttonVariants({ variant: "outline" }),
-  "border-white/60 bg-transparent text-white hover:bg-white/10 hover:text-white",
-);
-const solid = cn(buttonVariants(), "bg-white text-primary hover:bg-white/90");
+const authLinks = [
+  { name: "Register", url: "/register", variant: "outline" },
+  { name: "Login", url: "/login", variant: "default" },
+];
 
-export default function Navbar() {
+const linkClass = ({ isActive }) =>
+  cn(
+    "text-sm font-medium transition-colors hover:text-primary",
+    isActive ? "text-primary" : "text-muted-foreground",
+  );
+
+function Navbar() {
   const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
+
+  // close the mobile menu with the Escape key
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
-    <header className="absolute inset-x-0 top-0 z-30 text-white">
-      <nav className="container flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 text-lg font-semibold">
-          <Stethoscope className="size-6" />
-          DocCare
+    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur">
+      <nav
+        aria-label="Main"
+        className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
+      >
+        <Link to="/" onClick={close} className="text-2xl font-bold">
+          Allo<span className="text-primary"> Doctor</span>
         </Link>
 
-        <ul className="hidden items-center gap-8 text-sm md:flex">
-          {links.map((l) => (
-            <li key={l.href}>
-              <a href={l.href} className="opacity-90 hover:opacity-100">
-                {l.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <div className="hidden items-center gap-3 md:flex">
-          <Link to="/login" className={outline}>
-            Log in
-          </Link>
-          <Link to="/register" className={solid}>
-            Sign up
-          </Link>
+        {/* desktop */}
+        <div className="hidden items-center gap-8 md:flex">
+          <div className="flex items-center gap-6">
+            {links.map((link) => (
+              <NavLink key={link.url} to={link.url} className={linkClass}>
+                {link.name}
+              </NavLink>
+            ))}
+          </div>
+          <div className="flex items-center gap-2">
+            {authLinks.map((btn) => (
+              <Link
+                key={btn.url}
+                to={btn.url}
+                className={buttonVariants({ variant: btn.variant })}
+              >
+                {btn.name}
+              </Link>
+            ))}
+          </div>
         </div>
 
+        {/* mobile toggle */}
         <button
-          className="rounded-md p-2 hover:bg-white/10 md:hidden"
+          type="button"
           onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
+          aria-controls="mobile-menu"
+          className="rounded-md p-2 hover:bg-accent md:hidden"
         >
-          {open ? <X /> : <Menu />}
+          {open ? <X className="size-6" /> : <Menu className="size-6" />}
         </button>
       </nav>
 
+      {/* mobile panel */}
       {open && (
-        <div className="container md:hidden">
-          <div className="animate-rise space-y-1 rounded-xl bg-white p-4 text-foreground shadow-xl">
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="block rounded-md px-3 py-2 hover:bg-secondary"
+        <div
+          id="mobile-menu"
+          className="absolute inset-x-0 top-full border-b bg-background shadow-md md:hidden"
+        >
+          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6">
+            {links.map((link) => (
+              <NavLink
+                key={link.url}
+                to={link.url}
+                onClick={close}
+                className={({ isActive }) =>
+                  cn(
+                    "rounded-md px-3 py-2 text-base font-medium hover:bg-accent",
+                    isActive ? "text-primary" : "text-foreground",
+                  )
+                }
               >
-                {l.label}
-              </a>
+                {link.name}
+              </NavLink>
             ))}
-            <div className="flex gap-3 pt-3">
-              <Link
-                to="/login"
-                className={cn(buttonVariants({ variant: "outline" }), "flex-1")}
-              >
-                Log in
-              </Link>
-              <Link to="/register" className={cn(buttonVariants(), "flex-1")}>
-                Sign up
-              </Link>
+            <div className="mt-3 flex gap-3">
+              {authLinks.map((btn) => (
+                <Link
+                  key={btn.url}
+                  to={btn.url}
+                  onClick={close}
+                  className={cn(
+                    buttonVariants({ variant: btn.variant }),
+                    "flex-1",
+                  )}
+                >
+                  {btn.name}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
@@ -88,3 +122,5 @@ export default function Navbar() {
     </header>
   );
 }
+
+export default Navbar;

@@ -1,82 +1,37 @@
-import { Link } from "react-router-dom";
-import { CalendarCheck, Clock, ShieldCheck } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import Navbar from "./Navbar";
-import Photo from "../Photo";
+import React from "react";
 
-const perks = [
-  { icon: ShieldCheck, label: "Verified doctors" },
-  { icon: Clock, label: "Live availability" },
-  { icon: CalendarCheck, label: "Instant confirmation" },
-];
-
-export default function HeroSection() {
+function HeroSection() {
   return (
-    <section
-      id="home"
-      className="relative overflow-hidden bg-linear-to-br from-primary via-teal-600 to-teal-500 pt-28 text-white md:pt-32"
-    >
-      <Navbar />
-
-      <div className="container grid items-end gap-8 md:grid-cols-2">
-        <div className="animate-rise pb-10 md:pb-24">
-          <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-            Book your doctor appointment in minutes
+    <section className="w-full min-h-[80vh] flex items-center bg-[#F2F8F5]">
+      <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row items-center gap-10">
+        {/* Left: text + CTA */}
+        <div className="w-full md:w-1/2">
+          <p className="text-teal-600 font-medium">Allo Doctor</p>
+          <h1 className="mt-3 text-4xl md:text-6xl font-extrabold leading-tight text-slate-900">
+            See a doctor today, not next week.
           </h1>
-          <p className="mt-5 max-w-md text-base text-white/85 sm:text-lg">
-            Find a trusted doctor, pick a free time slot and get instant
-            confirmation. No phone calls, no waiting rooms.
+          <p className="mt-5 max-w-md text-lg text-slate-600">
+            Find a verified specialist near you and book in under a minute.
           </p>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              to="/doctors"
-              className={cn(
-                buttonVariants({ size: "lg" }),
-                "bg-white text-primary hover:bg-white/90",
-              )}
-            >
-              Find a doctor
-            </Link>
-            <a
-              href="#services"
-              className={cn(
-                buttonVariants({ variant: "outline", size: "lg" }),
-                "border-white/60 bg-transparent text-white hover:bg-white/10 hover:text-white",
-              )}
-            >
-              How it works
-            </a>
-          </div>
-
-          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/90">
-            {perks.map(({ icon: Icon, label }) => (
-              <li key={label} className="flex items-center gap-2">
-                <Icon className="size-4" />
-                {label}
-              </li>
-            ))}
-          </ul>
+          <a
+            href="/book"
+            className="mt-8 inline-block rounded-full bg-teal-600 px-7 py-3.5 font-medium text-white transition hover:bg-teal-700"
+          >
+            Book an appointment
+          </a>
         </div>
 
-        <div className="animate-rise relative flex justify-center [animation-delay:200ms] md:justify-end">
-          <Photo
-            src="/images/hero-doctor.jpg"
-            alt="Smiling doctor in a white coat"
-            className="h-80 w-full max-w-sm rounded-t-3xl sm:h-[26rem] md:h-[32rem]"
+        {/* Right: image */}
+        <div className="w-full md:w-1/2">
+          <img
+            src="https://plus.unsplash.com/premium_photo-1658506671316-0b293df7c72b?q=80&w=1170&auto=format&fit=crop"
+            alt="Doctor consulting a patient"
+            className="w-full h-[320px] md:h-[480px] object-cover rounded-3xl shadow-xl"
           />
-          <div className="animate-float absolute bottom-10 left-2 flex items-center gap-3 rounded-xl bg-white p-3 text-foreground shadow-xl sm:left-0 md:-left-4">
-            <span className="flex size-10 items-center justify-center rounded-full bg-secondary text-primary">
-              <CalendarCheck className="size-5" />
-            </span>
-            <div className="text-sm">
-              <p className="text-muted-foreground">Next available</p>
-              <p className="font-semibold">Today, 3:30 PM</p>
-            </div>
-          </div>
         </div>
       </div>
     </section>
   );
 }
+
+export default HeroSection;
