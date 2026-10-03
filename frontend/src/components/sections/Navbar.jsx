@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Menu, X, LayoutDashboard, UserCircle } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import NotificationBell from "@/components/NotificationBell";
 
 const links = [
   { name: "About", url: "/about" },
@@ -25,6 +27,14 @@ const linkClass = ({ isActive }) =>
 function Navbar() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    close();
+    logout();
+    navigate("/");
+  };
 
   // close the mobile menu with the Escape key
   useEffect(() => {
@@ -54,29 +64,56 @@ function Navbar() {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            {authLinks.map((btn) => (
-              <Link
-                key={btn.url}
-                to={btn.url}
-                className={buttonVariants({ variant: btn.variant })}
-              >
-                {btn.name}
-              </Link>
-            ))}
+            {isAuthenticated ? (
+              <>
+                <NotificationBell />
+                <Link
+                  to="/dashboard"
+                  title="Go to dashboard"
+                  className={cn(
+                    buttonVariants({ variant: "outline" }),
+                    "gap-2",
+                  )}
+                >
+                  <UserCircle className="size-4" />
+                  {user?.name?.split(" ")[0] ?? "Profile"}
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className={buttonVariants({ variant: "default" })}
+                >
+                  Log out
+                </button>
+              </>
+            ) : (
+              authLinks.map((btn) => (
+                <Link
+                  key={btn.url}
+                  to={btn.url}
+                  className={buttonVariants({ variant: btn.variant })}
+                >
+                  {btn.name}
+                </Link>
+              ))
+            )}
           </div>
         </div>
 
         {/* mobile toggle */}
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          className="rounded-md p-2 hover:bg-accent md:hidden"
-        >
-          {open ? <X className="size-6" /> : <Menu className="size-6" />}
-        </button>
+        <div className="flex items-center gap-1 md:hidden">
+          {isAuthenticated && <NotificationBell />}
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            className="rounded-md p-2 hover:bg-accent"
+          >
+            {open ? <X className="size-6" /> : <Menu className="size-6" />}
+          </button>
+        </div>
       </nav>
 
       {/* mobile panel */}
@@ -102,19 +139,42 @@ function Navbar() {
               </NavLink>
             ))}
             <div className="mt-3 flex gap-3">
-              {authLinks.map((btn) => (
-                <Link
-                  key={btn.url}
-                  to={btn.url}
-                  onClick={close}
-                  className={cn(
-                    buttonVariants({ variant: btn.variant }),
-                    "flex-1",
-                  )}
-                >
-                  {btn.name}
-                </Link>
-              ))}
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    onClick={close}
+                    className={cn(
+                      buttonVariants({ variant: "outline" }),
+                      "flex-1 gap-2",
+                    )}
+                  >
+                    <LayoutDashboard className="size-4" />
+                    Dashboard
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className={cn(buttonVariants({ variant: "default" }), "flex-1")}
+                  >
+                    Log out
+                  </button>
+                </>
+              ) : (
+                authLinks.map((btn) => (
+                  <Link
+                    key={btn.url}
+                    to={btn.url}
+                    onClick={close}
+                    className={cn(
+                      buttonVariants({ variant: btn.variant }),
+                      "flex-1",
+                    )}
+                  >
+                    {btn.name}
+                  </Link>
+                ))
+              )}
             </div>
           </div>
         </div>

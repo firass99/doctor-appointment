@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User, { ROLES } from "../models/user.js";
+import bcrypt from "bcryptjs";
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -54,8 +55,15 @@ export const login = async (req, res) => {
         .json({ message: "Email and password are required" });
     }
 
-    const user = await User.findOne({ email }).select("+password");
-    if (!user || !(await user.comparePassword(password))) {
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    console.log("STORED:", user.password);
+
+    const isMatch = await bcrypt.compare(password, user.password); // plain first, hash second
+    if (!isMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
@@ -69,6 +77,7 @@ export const login = async (req, res) => {
       },
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };

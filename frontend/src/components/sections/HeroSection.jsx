@@ -1,24 +1,37 @@
-import React from "react";
+import { Link } from "react-router-dom";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 function HeroSection() {
   return (
-    <section className="w-full min-h-[80vh] flex items-center bg-[#F2F8F5]">
+    <section className="w-full min-h-[80vh] flex items-center bg-accent/40">
       <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row items-center gap-10">
         {/* Left: text + CTA */}
         <div className="w-full md:w-1/2">
-          <p className="text-teal-600 font-medium">Allo Doctor</p>
-          <h1 className="mt-3 text-4xl md:text-6xl font-extrabold leading-tight text-slate-900">
+          <p className="font-medium text-primary">Allo Doctor</p>
+          <h1 className="mt-3 text-4xl md:text-6xl font-extrabold leading-tight text-foreground">
             See a doctor today, not next week.
           </h1>
-          <p className="mt-5 max-w-md text-lg text-slate-600">
+          <p className="mt-5 max-w-md text-lg text-muted-foreground">
             Find a verified specialist near you and book in under a minute.
           </p>
-          <a
-            href="/book"
-            className="mt-8 inline-block rounded-full bg-teal-600 px-7 py-3.5 font-medium text-white transition hover:bg-teal-700"
-          >
-            Book an appointment
-          </a>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              to="/doctors"
+              className={cn(buttonVariants({ size: "lg" }), "rounded-full px-7")}
+            >
+              Book an appointment
+            </Link>
+            <Link
+              to="/departments"
+              className={cn(
+                buttonVariants({ size: "lg", variant: "outline" }),
+                "rounded-full px-7",
+              )}
+            >
+              Explore departments
+            </Link>
+          </div>
         </div>
 
         {/* Right: image */}

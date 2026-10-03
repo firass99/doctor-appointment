@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export default function Photo({ src, alt, className }) {
   const [failed, setFailed] = useState(false);
 
-  if (failed) {
+  if (failed || !src) {
     return (
       <div
         role="img"
